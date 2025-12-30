@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>给你一个新年惊喜～🎆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:radial-gradient(circle at bottom,#05051a,#000);
+  height:100vh;
+  overflow:hidden;
+  font-family:'Arial',sans-serif;
+  color:#fff;
+  text-align:center;
+}
+.screen{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+.hidden{display:none;}
+h1,h2,p{
+  text-shadow:0 0 10px #fff,0 0 20px #ff4dff;
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+button{
+  margin-top:20px;
+  padding:15px 30px;
+  font-size:1.1em;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(45deg,#ff0080,#ffcc00);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 0 20px #ff0080;
+}
+.firework{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:explode 1s forwards;
+}
+@keyframes explode{
+  from{transform:scale(0);opacity:1;}
+  to{transform:scale(6);opacity:0;}
+}
+.shake{
+  animation:shake 0.5s;
+}
+@keyframes shake{
+  0%{transform:translate(0);}
+  25%{transform:translate(5px,5px);}
+  50%{transform:translate(-5px,5px);}
+  75%{transform:translate(5px,-5px);}
+  100%{transform:translate(0);}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="screen" id="intro">
+  <h1>✨ 给特别的人 ✨</h1>
+</div>
+
+<!-- LAYER 1 -->
+<div class="screen hidden" id="layer1">
+  <h1>新年快乐呀🎉</h1>
+  <button onclick="nextLayer(2)">先看这个 👀</button>
+</div>
+
+<!-- LAYER 2 -->
+<div class="screen hidden" id="layer2">
+  <h2>愿你 2026 年</h2>
+  <p>每天都被幸福包围 🌈🌟</p>
+  <button onclick="nextLayer(3)">别急，还有下一页 😉</button>
+</div>
+
+<!-- LAYER 3 -->
+<div class="screen hidden" id="layer3">
+  <h2>愿烦恼少一点</h2>
+  <p>开心多一点 ❤️</p>
+  <button onclick="nextLayer(4)">真·最后了 😆 🎁</button>
+</div>
+
+<!-- FINAL -->
+<div class="screen hidden" id="final">
+  <h1>希望新的一年</h1>
+  <h2>我们都能更开心 😊</h2>
+  <p>✨ Happy New Year ✨</p>
+</div>
+
+<script>
+const screens=document.querySelectorAll('.screen');
+
+// intro auto
+setTimeout(()=>{
+  screens[0].classList.add('hidden');
+  screens[1].classList.remove('hidden');
+  launchFireworks(40);
+},3000);
+
+function nextLayer(n){
+  screens.forEach(s=>s.classList.add('hidden'));
+  document.getElementById('layer'+n)?.classList.remove('hidden');
+  if(n===4) document.getElementById('final').classList.remove('hidden');
+  document.body.classList.add('shake');
+  setTimeout(()=>document.body.classList.remove('shake'),500);
+  launchFireworks(60);
+}
+
+// fireworks
+function launchFireworks(count){
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const f=document.createElement('div');
+      f.className='firework';
+      f.style.left=Math.random()*window.innerWidth+'px';
+      f.style.top=Math.random()*window.innerHeight+'px';
+      f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+      document.body.appendChild(f);
+      setTimeout(()=>f.remove(),1000);
+    },i*80);
+  }
+}
+
+// falling stars
+setInterval(()=>{
+  const s=document.createElement('div');
+  s.style.position='absolute';
+  s.style.width='2px';
+  s.style.height='2px';
+  s.style.background='white';
+  s.style.left=Math.random()*window.innerWidth+'px';
+  s.style.top='0px';
+  document.body.appendChild(s);
+  let y=0;
+  const fall=setInterval(()=>{
+    y+=5;
+    s.style.top=y+'px';
+    if(y>window.innerHeight){
+      s.remove();
+      clearInterval(fall);
+    }
+  },16);
+},120);
+</script>
+
+</body>
+</html>
